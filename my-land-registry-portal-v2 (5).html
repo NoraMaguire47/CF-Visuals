@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en" class="govuk-template">
+<head>
+<meta charset="utf-8">
+<title>My Land Registry: National Property Portal – Prototype</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/govuk-frontend@5.4.1/dist/govuk/govuk-frontend.min.css">
+<style>
+/* ── Prototype shell ────────────────────────────────────────────── */
+*{box-sizing:border-box;}
+.proto-bar{background:#0b0c0c;color:#fff;text-align:center;padding:5px 15px;font-family:arial,sans-serif;font-size:13px;letter-spacing:.02em;}
+.proto-bar strong{color:#ffdd00;}
+.page{display:none;}
+.page.active{display:block;}
+
+/* ── Sub-nav ────────────────────────────────────────────────────── */
+.subnav{background:#f3f2f1;border-bottom:1px solid #b1b4b6;}
+.subnav__inner{max-width:960px;margin:0 auto;padding:0 15px;display:flex;flex-wrap:wrap;}
+.subnav a{display:inline-block;padding:10px 14px 10px 0;font-family:arial,sans-serif;font-size:16px;color:#0b0c0c;text-decoration:none;border-bottom:4px solid transparent;margin-right:4px;}
+.subnav a:hover{text-decoration:underline;}
+.subnav a.is-current{border-bottom-color:#1d70b8;font-weight:700;}
+
+/* ── Task list ──────────────────────────────────────────────────── */
+.tl-heading{font-size:19px;font-weight:700;font-family:arial,sans-serif;margin:25px 0 5px;}
+.tl-group{list-style:none;margin:0 0 20px;padding:0;border-top:1px solid #b1b4b6;}
+.tl-item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid #b1b4b6;}
+.tl-item a{font-family:arial,sans-serif;font-size:19px;}
+
+/* ── Nav cards ──────────────────────────────────────────────────── */
+.nav-cards{display:flex;gap:20px;flex-wrap:wrap;margin-top:30px;}
+.nav-card{flex:1;min-width:200px;border:2px solid #1d70b8;padding:20px;text-decoration:none;color:#0b0c0c;font-family:arial,sans-serif;}
+.nav-card:hover{background:#f3f2f1;}
+.nav-card__title{font-size:19px;font-weight:700;color:#1d70b8;display:block;margin-bottom:8px;}
+.nav-card__desc{font-size:16px;}
+
+/* ── Alert / callout ────────────────────────────────────────────── */
+.callout-blue{border-left:5px solid #1d70b8;padding:15px 20px;background:#e8f4fd;margin:20px 0;}
+.callout-red{border-left:5px solid #d4351c;padding:15px 20px;background:#fde8e6;margin:20px 0;}
+.callout-yellow{border-left:5px solid #fd0;padding:15px 20px;background:#fffce5;margin:20px 0;}
+
+/* ── Equity bar ─────────────────────────────────────────────────── */
+.equity-bar{height:36px;display:flex;border-radius:4px;overflow:hidden;margin:16px 0;}
+.equity-bar__sarah{background:#1d70b8;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;font-family:arial,sans-serif;transition:width .4s;}
+.equity-bar__david{background:#4c2c92;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;font-family:arial,sans-serif;transition:width .4s;}
+.equity-bar__third{background:#00703c;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;font-family:arial,sans-serif;transition:width .4s;}
+
+/* ── Hidden toggle ──────────────────────────────────────────────── */
+.js-hidden{display:none;}
+
+/* ── Protocol status ────────────────────────────────────────────── */
+.proto-status{display:inline-flex;align-items:center;gap:10px;padding:10px 16px;background:#f3f2f1;border:1px solid #b1b4b6;font-family:arial,sans-serif;}
+
+[data-nav]{cursor:pointer;}
+</style>
+</head>
+<body class="govuk-template__body">
+<script>document.body.className+=' js-enabled';</script>
+
+<!-- ─── PROTOTYPE BANNER ──────────────────────────────────────────── -->
+<div class="proto-bar">PROTOTYPE — <strong>not a real GOV.UK service</strong> — all data is fictional and for design demonstration only</div>
+
+<!-- ─── HEADER MINIMAL (pre-login) ───────────────────────────────── -->
+<header id="hdr-min" class="govuk-header">
+  <div class="govuk-header__container govuk-width-container">
+    <div class="govuk-header__logo">
+      <a href="#" class="govuk-header__link govuk-header__link--homepage" data-nav="start">
+        <svg focusable="false" class="govuk-header__logotype" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 148 30" height="30" width="148" aria-label="GOV.UK"><title>GOV.UK</title><path d="M22.6 10.4c-1 .4-2-.1-2.3-1-.4-.9.1-2 1-2.3.9-.4 2 .1 2.3 1 .4 1-.1 2-1 2.3m-5.9 6.7c-.9.4-2-.1-2.3-1-.4-.9.1-2 1-2.3.9-.4 2 .1 2.3 1s-.1 2-1 2.3m10.8-3.7c-1 .4-2-.1-2.3-1-.4-.9.1-2 1-2.3.9-.4 2 .1 2.3 1 .4 1-.1 2-1 2.3m5.7 4.5c-.9.4-2-.1-2.3-1-.4-.9.1-2 1-2.3.9-.4 2 .1 2.3 1 .4.9-.1 2-1 2.3M17 4.7l2.3 1.2V2.5l-2.3.7-.2-.2.9-3h-3.4l.9 3-.2.2c-.1.1-2.3-.7-2.3-.7v3.4L15 4.7c.1.1.1.2.2.3l-1.3 4c-.1.2-.1.4-.1.6 0 1.1.8 2 1.9 2.2h.7c1-.2 1.9-1.1 1.9-2.1 0-.2 0-.4-.1-.6l-1.3-4c-.1-.2 0-.2.1-.4m3.6 18.6c-1.6.3-3.3.6-5.2.6-1.9 0-3.6-.2-5.2-.6.2-.5.7-1.6 1.2-2.4-2.1.4-3.7.9-4.7 1.4-1.1.5-1.7 1.1-1.7 1.7v6.4c0 .6.6 1.1 1.7 1.7 1 .5 2.6 1 4.7 1.4-.5-.8-1-1.9-1.2-2.4 1.6-.3 3.3-.6 5.2-.6 1.9 0 3.6.2 5.2.6-.2.5-.7 1.6-1.2 2.4 2.1-.4 3.7-.9 4.7-1.4 1.1-.5 1.7-1.1 1.7-1.7v-6.4c0-.6-.6-1.1-1.7-1.7-1-.5-2.6-1-4.7-1.4.5.8 1 1.9 1.2 2.4" fill="currentColor"/></svg>
+        <span class="govuk-header__product-name">My Land Registry</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ─── HEADER FULL (post-login) ─────────────────────────────────── -->
+<header id="hdr-full" class="govuk-header" style="display:none;">
+  <div class="govuk-header__container govuk-width-container">
+    <div class="govuk-header__logo">
+      <a href="#" class="govuk-header__link govuk-header__link--homepage" data-nav="dashboard">
+        <svg focusable="false" class="govuk-header__logotype" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 148 30" height="30" width="148" aria-label="GOV.UK"><title>GOV.UK</title><path d="M22.6 10.4c-1 .4-2-.1-2.3-1-.4-.9.1-2 1-2.3.9-.4 2 .1 2.3 1 .4 1-.1 2-1 2.3m-5.9 6.7c-.9.4-2-.1-2.3-1-.4-.9.1-2 1-2.3.9-.4 2 .1 2.3 1s-.1 2-1 2.3m10.8-3.7c-1 .4-2-.1-2.3-1-.4-.9.1-2 1-2.3.9-.4 2 .1 2.3 1 .4 1-.1 2-1 2.3m5.7 4.5c-.9.4-2-.1-2.3-1-.4-.9.1-2 1-2.3.9-.4 2 .1 2.3 1 .4.9-.1 2-1 2.3M17 4.7l2.3 1.2V2.5l-2.3.7-.2-.2.9-3h-3.4l.9 3-.2.2c-.1.1-2.3-.7-2.3-.7v3.4L15 4.7c.1.1.1.2.2.3l-1.3 4c-.1.2-.1.4-.1.6 0 1.1.8 2 1.9 2.2h.7c1-.2 1.9-1.1 1.9-2.1 0-.2 0-.4-.1-.6l-1.3-4c-.1-.2 0-.2.1-.4m3.6 18.6c-1.6.3-3.3.6-5.2.6-1.9 0-3.6-.2-5.2-.6.2-.5.7-1.6 1.2-2.4-2.1.4-3.7.9-4.7 1.4-1.1.5-1.7 1.1-1.7 1.7v6.4c0 .6.6 1.1 1.7 1.7 1 .5 2.6 1 4.7 1.4-.5-.8-1-1.9-1.2-2.4 1.6-.3 3.3-.6 5.2-.6 1.9 0 3.6.2 5.2.6-.2.5-.7 1.6-1.2 2.4 2.1-.4 3.7-.9 4.7-1.4 1.1-.5 1.7-1.1 1.7-1.7v-6.4c0-.6-.6-1.1-1.7-1.7-1-.5-2.6-1-4.7-1.4.5.8 1 1.9 1.2 2.4" fill="currentColor"/></svg>
+        <span class="govuk-header__product-name">My Land Registry</span>
+      </a>
+    </div>
+    <div class="govuk-header__content">
+      <nav class="govuk-header__navigation" aria-label="Account">
+        <ul class="govuk-header__navigation-list">
+          <li class="govuk-header__navigation-item"><span class="govuk-header__link">Sarah Jones</span></li>
+          <li class="govuk-header__navigation-item"><a class="govuk-header__link" href="#" data-nav="start">Sign out</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<!-- ─── SUB-NAV ───────────────────────────────────────────────────── -->
+<div id="subnav" class="subnav" style="display:none;">
+  <div class="subnav__inner">
+    <a href="#" data-nav="dashboard" data-subnav="dashboard">Dashboard</a>
+    <a href="#" data-nav="privacy"   data-subnav="privacy">Privacy &amp; access log</a>
+    <a href="#" data-nav="perms"     data-subnav="perms">Permissions</a>
+    <a href="#" data-nav="services"  data-subnav="services">All services</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     PAGES
+═══════════════════════════════════════════════════════════════════ -->
+<div class="govuk-width-container">
+<main class="govuk-main-wrapper" id="main-content" role="main">
+
+<!-- ══ PAGE 1: START ═══════════════════════════════════════════════ -->
+<section id="page-start" class="page active">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">Manage your land and property details</h1>
+      <p class="govuk-body-l">Use this free service to view and manage the official digital record of your property, replacing paper-based Land Registry applications.</p>
+      <p class="govuk-body">You can now do all of the following digitally and free of charge:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>View your definitive digital property title instantly.</li>
+        <li>Alter your tenancy type (for example, sever a joint tenancy) and manage equity shares.</li>
+        <li>Track real-time privacy access logs and grant data permissions to third parties.</li>
+        <li>Pre-authorise digital property inheritance protocols.</li>
+      </ul>
+      <a href="#" role="button" class="govuk-button govuk-button--start" data-nav="login">
+        Start now
+        <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true"><path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"/></svg>
+      </a>
+      <h2 class="govuk-heading-m">Before you start</h2>
+      <p class="govuk-body">You will need to sign in with a GOV.UK One Login. If you do not have one, you can create one when you first sign in.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PAGE 2: LOGIN ══════════════════════════════════════════════ -->
+<section id="page-login" class="page">
+  <a class="govuk-back-link" href="#" data-nav="start">Back</a>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">Sign in to your GOV.UK One Login</h1>
+      <form onsubmit="return false;">
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="email">Email address</label>
+          <input class="govuk-input" id="email" name="email" type="email" autocomplete="email" value="sarah.jones@example.com">
+        </div>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="password">Password</label>
+          <input class="govuk-input" id="password" name="password" type="password" value="••••••••••">
+        </div>
+        <p class="govuk-body"><a class="govuk-link" href="#" onclick="return false;">I've forgotten my password</a></p>
+        <button class="govuk-button" data-nav="dashboard">Sign in</button>
+      </form>
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+      <p class="govuk-body"><a class="govuk-link" href="#" onclick="return false;">Create a GOV.UK One Login</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PAGE 3: DASHBOARD ══════════════════════════════════════════ -->
+<section id="page-dashboard" class="page">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h1 class="govuk-heading-xl">My property records</h1>
+
+      <div class="govuk-notification-banner" role="region" aria-labelledby="nb-title-dash" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="nb-title-dash">Information</h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+          <p class="govuk-notification-banner__heading">This is a digital summary of your property title, provided free of charge.</p>
+        </div>
+      </div>
+
+      <h2 class="govuk-heading-l">1 Crown Avenue, Lewes</h2>
+
+      <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Address</dt>
+          <dd class="govuk-summary-list__value">1 Crown Avenue, Lewes, BN7 2AB</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#" onclick="return false;">Change<span class="govuk-visually-hidden"> address</span></a></dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Title number</dt>
+          <dd class="govuk-summary-list__value">ESX123456</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#" onclick="return false;">Change<span class="govuk-visually-hidden"> title number</span></a></dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Tenure</dt>
+          <dd class="govuk-summary-list__value">Freehold</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#" onclick="return false;">Change<span class="govuk-visually-hidden"> tenure</span></a></dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Current legal proprietors</dt>
+          <dd class="govuk-summary-list__value">Sarah Jones, David Jones</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#" onclick="return false;">Change<span class="govuk-visually-hidden"> proprietors</span></a></dd>
+        </div>
+      </dl>
+
+      <div class="nav-cards">
+        <a href="#" class="nav-card" data-nav="privacy">
+          <span class="nav-card__title">View privacy &amp; access logs</span>
+          <span class="nav-card__desc">See a real-time record of every organisation or individual that has accessed your title data.</span>
+        </a>
+        <a href="#" class="nav-card" data-nav="services">
+          <span class="nav-card__title">Manage property services &amp; ownership updates</span>
+          <span class="nav-card__desc">Change names, sever tenancies, transfer equity, and more — all fully digital.</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PAGE 4: PRIVACY LOG ════════════════════════════════════════ -->
+<section id="page-privacy" class="page">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h1 class="govuk-heading-xl">Privacy and data access log</h1>
+      <p class="govuk-body">This ledger records every official data request or edit made to this property title in real-time. It is provided under your rights as a data subject under the UK Data Protection Act 2018.</p>
+
+      <div class="callout-red">
+        <p class="govuk-body govuk-!-margin-bottom-0"><strong>Security alert — action required.</strong> An unauthorised access attempt was detected on 21 June 2026. A temporary security lock has been applied. <a class="govuk-link" href="#" data-nav="perms">Review permissions</a> to lift the lock.</p>
+      </div>
+
+      <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--m">Access history — title ESX123456</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Date</th>
+            <th scope="col" class="govuk-table__header">Organisation / individual</th>
+            <th scope="col" class="govuk-table__header">Activity</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row" style="background:#fde8e6;">
+            <td class="govuk-table__cell" style="white-space:nowrap;"><strong>21 Jun 2026</strong></td>
+            <td class="govuk-table__cell"><strong>John Miller (Individual / Unverified)</strong></td>
+            <td class="govuk-table__cell">Requested full title deed download. <strong class="govuk-tag govuk-tag--red">Flagged — unauthorised</strong><br><span class="govuk-body-s">Automated security lock placed on title adjustments pending your review.</span></td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" style="white-space:nowrap;">14 Jun 2026</td>
+            <td class="govuk-table__cell">Lloyds Banking Group</td>
+            <td class="govuk-table__cell">Verified mortgage charge <strong class="govuk-tag govuk-tag--green">Approved</strong></td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" style="white-space:nowrap;">12 Jun 2026</td>
+            <td class="govuk-table__cell">HM Land Registry</td>
+            <td class="govuk-table__cell">Automated death register cross-reference sync</td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" style="white-space:nowrap;">01 May 2026</td>
+            <td class="govuk-table__cell">Sussex Council</td>
+            <td class="govuk-table__cell">Council tax valuation boundary check</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PAGE 5: PERMISSIONS ════════════════════════════════════════ -->
+<section id="page-perms" class="page">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">Grant access permissions</h1>
+      <p class="govuk-body">You can give approved third parties a temporary digital key to view your unredacted title deeds. Access is time-limited and can be revoked instantly.</p>
+
+      <h2 class="govuk-heading-m">Active and past permissions</h2>
+      <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Lloyds Banking Group<br><span style="font-weight:normal;font-size:14px;">Firm ID: LBG-MORT-0042</span></dt>
+          <dd class="govuk-summary-list__value"><strong class="govuk-tag govuk-tag--green">Active</strong><br>Title and charges only<br>Expires: 1 Mar 2027</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#" onclick="return false;">Revoke</a></dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Thompson &amp; Co Solicitors<br><span style="font-weight:normal;font-size:14px;">Firm ID: SRA-THO-2819</span></dt>
+          <dd class="govuk-summary-list__value"><strong class="govuk-tag govuk-tag--grey">Expired</strong><br>Full access<br>Expired: 30 Dec 2025</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#" onclick="return false;">Renew</a></dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">John Miller (Individual / Unverified)<br><span style="font-weight:normal;font-size:14px;">No verified firm ID</span></dt>
+          <dd class="govuk-summary-list__value"><strong class="govuk-tag govuk-tag--red">Blocked</strong><br>Access denied — flagged as unauthorised</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#" onclick="return false;">Report</a></dd>
+        </div>
+      </dl>
+
+      <!-- Grant new permission toggle -->
+      <button class="govuk-button govuk-button--secondary" id="btn-grant" onclick="document.getElementById('grant-form').classList.toggle('js-hidden');this.textContent=this.textContent.includes('Grant')?'Cancel':'Grant new permission';">Grant new permission</button>
+
+      <div id="grant-form" class="js-hidden govuk-!-padding-top-4">
+        <h2 class="govuk-heading-m">Grant new permission</h2>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="corp-id">Corporate or solicitor firm ID</label>
+          <div id="corp-id-hint" class="govuk-hint">For example: SRA-THO-2819 or LBG-MORT-0042</div>
+          <input class="govuk-input govuk-input--width-20" id="corp-id" name="corp-id" type="text" aria-describedby="corp-id-hint">
+        </div>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="access-duration">Access duration</label>
+          <select class="govuk-select" id="access-duration" name="access-duration">
+            <option value="">Select an option</option>
+            <option value="24h">24 hours</option>
+            <option value="7d">7 days</option>
+            <option value="30d">30 days</option>
+          </select>
+        </div>
+        <button class="govuk-button" onclick="showGrantSuccess();">Grant access</button>
+        <div id="grant-success" class="js-hidden">
+          <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="nb-success-grant">
+            <div class="govuk-notification-banner__header"><h2 class="govuk-notification-banner__title" id="nb-success-grant">Success</h2></div>
+            <div class="govuk-notification-banner__content"><p class="govuk-body">Access has been granted. The organisation will receive a secure notification to their registered portal account.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PAGE 6: ALL SERVICES ════════════════════════════════════════ -->
+<section id="page-services" class="page">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">Manage your property services and ownership updates</h1>
+      <p class="govuk-body">These services previously required paper forms. They are now fully digital and collaborative.</p>
+
+      <p class="tl-heading">A. Personal details</p>
+      <ul class="tl-group">
+        <li class="tl-item">
+          <span class="tl-name"><a class="govuk-link govuk-link--no-visited-state" href="#" onclick="return false;">Change name on title (via marriage or deed poll)</a></span>
+          <strong class="govuk-tag govuk-tag--grey">Not started</strong>
+        </li>
+      </ul>
+
+      <p class="tl-heading">B. Ownership &amp; tenancy alterations</p>
+      <ul class="tl-group">
+        <li class="tl-item">
+          <span class="tl-name"><a class="govuk-link govuk-link--no-visited-state" href="#" data-nav="sever">Sever a joint tenancy</a></span>
+          <strong class="govuk-tag govuk-tag--grey">Not started</strong>
+        </li>
+        <li class="tl-item">
+          <span class="tl-name"><a class="govuk-link govuk-link--no-visited-state" href="#" data-nav="equity">Transfer a share of property equity</a></span>
+          <strong class="govuk-tag govuk-tag--grey">Not started</strong>
+        </li>
+      </ul>
+
+      <p class="tl-heading">C. Inheritance and future planning</p>
+      <ul class="tl-group">
+        <li class="tl-item">
+          <span class="tl-name"><a class="govuk-link govuk-link--no-visited-state" href="#" data-nav="inherit">Pre-authorise digital inheritance protocol</a></span>
+          <strong class="govuk-tag govuk-tag--blue">Beta</strong>
+        </li>
+        <li class="tl-item">
+          <span class="tl-name"><a class="govuk-link govuk-link--no-visited-state" href="#" onclick="return false;">Transfer a property after the death of a proprietor (Assent)</a></span>
+          <strong class="govuk-tag govuk-tag--grey">Not started</strong>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PAGE 7: SEVER JOINT TENANCY ═══════════════════════════════ -->
+<section id="page-sever" class="page">
+  <a class="govuk-back-link" href="#" data-nav="services">Back</a>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">Sever your joint tenancy</h1>
+      <p class="govuk-body">This action converts the ownership type for <strong>1 Crown Avenue, Lewes</strong> from <strong>Joint Tenants</strong> to <strong>Tenants in Common</strong>.</p>
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-6">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Current tenure type</dt>
+          <dd class="govuk-summary-list__value">Joint Tenants <span class="govuk-hint govuk-!-margin-top-1 govuk-!-margin-bottom-0">Equal rights with automatic survivorship. If one owner dies, the property passes automatically to the survivor.</span></dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">After severance</dt>
+          <dd class="govuk-summary-list__value">Tenants in Common <span class="govuk-hint govuk-!-margin-top-1 govuk-!-margin-bottom-0">Distinct defined shares. Each owner can leave their share in a will independently.</span></dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Your co-owner</dt>
+          <dd class="govuk-summary-list__value">David Jones</dd>
+        </div>
+      </dl>
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" aria-describedby="sever-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">How do you want to sever the tenancy?</legend>
+          <div id="sever-hint" class="govuk-hint">Select one option.</div>
+          <div class="govuk-radios" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="sever-joint" name="sever-type" type="radio" value="joint" onchange="document.getElementById('sever-joint-alert').classList.remove('js-hidden');document.getElementById('sever-unilateral-alert').classList.add('js-hidden');">
+              <label class="govuk-label govuk-radios__label" for="sever-joint">Yes, I want to sever this tenancy jointly</label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="sever-uni" name="sever-type" type="radio" value="unilateral" onchange="document.getElementById('sever-unilateral-alert').classList.remove('js-hidden');document.getElementById('sever-joint-alert').classList.add('js-hidden');">
+              <label class="govuk-label govuk-radios__label" for="sever-uni">No, I am serving a unilateral notice of severance</label>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <div id="sever-joint-alert" class="callout-blue js-hidden">
+        <p class="govuk-body govuk-!-margin-bottom-0"><strong>Co-owner notification:</strong> Selecting this option will send a notification to David Jones's GOV.UK One Login portal requesting electronic signature acknowledgement before the severance is registered.</p>
+      </div>
+      <div id="sever-unilateral-alert" class="callout-yellow js-hidden">
+        <p class="govuk-body govuk-!-margin-bottom-0"><strong>Unilateral notice:</strong> You do not need your co-owner's consent. HM Land Registry will serve formal notice on David Jones. This cannot be withdrawn once submitted.</p>
+      </div>
+
+      <div class="govuk-!-margin-top-6">
+        <button class="govuk-button" onclick="showSeverSuccess();">Submit request</button>
+      </div>
+      <div id="sever-success" class="js-hidden">
+        <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="nb-sever-ok">
+          <div class="govuk-notification-banner__header"><h2 class="govuk-notification-banner__title" id="nb-sever-ok">Success</h2></div>
+          <div class="govuk-notification-banner__content"><p class="govuk-body">Your severance request has been submitted. David Jones has been notified via his GOV.UK One Login portal. Your title will be updated within 2 working days once acknowledgement is received.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PAGE 8: EQUITY TRANSFER ════════════════════════════════════ -->
+<section id="page-equity" class="page">
+  <a class="govuk-back-link" href="#" data-nav="services">Back</a>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">Transfer a share of property equity</h1>
+      <p class="govuk-body">This service allows you to gift or transfer a portion of your equity stake in <strong>1 Crown Avenue, Lewes</strong> to another person using their GOV.UK One Login ID.</p>
+
+      <h2 class="govuk-heading-m">Current ownership shares</h2>
+      <table class="govuk-table govuk-!-margin-bottom-4">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Proprietor</th>
+            <th scope="col" class="govuk-table__header">Current share</th>
+            <th scope="col" class="govuk-table__header">Share after transfer</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Sarah Jones</td>
+            <td class="govuk-table__cell">50%</td>
+            <td class="govuk-table__cell" id="sarah-after">50%</td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">David Jones</td>
+            <td class="govuk-table__cell">50%</td>
+            <td class="govuk-table__cell">50%</td>
+          </tr>
+          <tr class="govuk-table__row" id="third-party-row" style="display:none;">
+            <td class="govuk-table__cell" id="third-party-name">—</td>
+            <td class="govuk-table__cell">0%</td>
+            <td class="govuk-table__cell" id="third-party-after">—</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="equity-bar">
+        <div class="equity-bar__sarah" id="bar-sarah" style="width:50%;">Sarah 50%</div>
+        <div class="equity-bar__david" id="bar-david" style="width:50%;">David 50%</div>
+        <div class="equity-bar__third" id="bar-third" style="width:0%;"></div>
+      </div>
+
+      <div class="govuk-form-group govuk-!-margin-top-6">
+        <label class="govuk-label" for="transfer-pct">Percentage of your share to transfer (1–50%)</label>
+        <div class="govuk-hint">Enter a whole number between 1 and 50.</div>
+        <input class="govuk-input govuk-input--width-5" id="transfer-pct" name="transfer-pct" type="number" min="1" max="50" oninput="updateEquity(this.value);">
+        <span class="govuk-body"> % of total property</span>
+      </div>
+
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="recipient-id">Recipient's GOV.UK One Login ID</label>
+        <div class="govuk-hint">For example: ONEID-8462-XKJT</div>
+        <input class="govuk-input govuk-input--width-20" id="recipient-id" name="recipient-id" type="text" oninput="updateRecipient(this.value);">
+      </div>
+
+      <div id="equity-success" class="js-hidden">
+        <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="nb-eq-ok">
+          <div class="govuk-notification-banner__header"><h2 class="govuk-notification-banner__title" id="nb-eq-ok">Preview updated</h2></div>
+          <div class="govuk-notification-banner__content"><p class="govuk-body" id="equity-success-msg">The table and chart above show a preview of the proposed transfer. Submit below to register this change.</p></div>
+        </div>
+      </div>
+
+      <button class="govuk-button govuk-!-margin-top-2" onclick="return false;">Submit transfer request</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PAGE 9: DIGITAL INHERITANCE ════════════════════════════════ -->
+<section id="page-inherit" class="page">
+  <a class="govuk-back-link" href="#" data-nav="services">Back</a>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">Pre-authorise digital property inheritance</h1>
+      <p class="govuk-body">This advanced planning screen lets you specify what happens to your property registry entry upon your death, cutting out months of probate delays.</p>
+      <p class="govuk-body">Your instructions are stored securely in HM Land Registry's encrypted digital vault and can only be activated upon verified confirmation of death from the General Register Office (GRO).</p>
+
+      <div class="callout-yellow">
+        <p class="govuk-body govuk-!-margin-bottom-0"><strong>Important:</strong> This protocol acts as a digital directive to HM Land Registry. It can be modified or revoked by you at any time using this secure portal. It does not replace a formal will.</p>
+      </div>
+
+      <div class="proto-status govuk-!-margin-top-6 govuk-!-margin-bottom-6">
+        <span class="govuk-body">Protocol status:</span>
+        <strong class="govuk-tag govuk-tag--grey" id="inherit-status-tag">Inactive — setup pending</strong>
+      </div>
+
+      <form onsubmit="return false;">
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Probate verification</legend>
+            <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+              <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="probate-check" name="probate" type="checkbox" onchange="updateInheritStatus();">
+                <label class="govuk-label govuk-checkboxes__label" for="probate-check">In the event of my death, automatically verify my digital Grant of Probate via the UK General Register Office.</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="beneficiary-id">Primary beneficiary's GOV.UK One Login ID</label>
+          <div class="govuk-hint">The person who will inherit your share of this property. For example: ONEID-3871-JCZP</div>
+          <input class="govuk-input govuk-input--width-20" id="beneficiary-id" name="beneficiary-id" type="text" oninput="updateInheritStatus();">
+        </div>
+
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Additional options</legend>
+            <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+              <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="notify-solicitor" name="notify-solicitor" type="checkbox">
+                <label class="govuk-label govuk-checkboxes__label" for="notify-solicitor">Notify my nominated solicitor automatically when this protocol is activated.</label>
+              </div>
+              <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="freeze-title" name="freeze-title" type="checkbox">
+                <label class="govuk-label govuk-checkboxes__label" for="freeze-title">Freeze all third-party access to my title immediately upon activation (pending probate clearance).</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <button class="govuk-button" onclick="saveInherit(); return false;">Save protocol settings</button>
+      </form>
+
+      <div id="inherit-success" class="js-hidden govuk-!-margin-top-4">
+        <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="nb-inherit-ok">
+          <div class="govuk-notification-banner__header"><h2 class="govuk-notification-banner__title" id="nb-inherit-ok">Success</h2></div>
+          <div class="govuk-notification-banner__content"><p class="govuk-body">Your digital inheritance protocol has been saved. Status updated to Active. You can modify or revoke this at any time.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<!-- ─── FOOTER ────────────────────────────────────────────────────── -->
+<footer class="govuk-footer">
+  <div class="govuk-width-container">
+    <div class="govuk-footer__meta">
+      <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+        <h2 class="govuk-visually-hidden">Support links</h2>
+        <ul class="govuk-footer__inline-list">
+          <li class="govuk-footer__inline-list-item"><a class="govuk-footer__link" href="#" onclick="return false;">Help</a></li>
+          <li class="govuk-footer__inline-list-item"><a class="govuk-footer__link" href="#" onclick="return false;">Privacy</a></li>
+          <li class="govuk-footer__inline-list-item"><a class="govuk-footer__link" href="#" onclick="return false;">Cookies</a></li>
+          <li class="govuk-footer__inline-list-item"><a class="govuk-footer__link" href="#" onclick="return false;">Accessibility statement</a></li>
+          <li class="govuk-footer__inline-list-item"><a class="govuk-footer__link" href="#" onclick="return false;">Contact</a></li>
+          <li class="govuk-footer__inline-list-item"><a class="govuk-footer__link" href="#" onclick="return false;">Terms and conditions</a></li>
+        </ul>
+        <p class="govuk-footer__licence-description">All content available under the <a class="govuk-footer__link" href="#" onclick="return false;" rel="license">Open Government Licence v3.0</a>, except where stated.</p>
+      </div>
+      <div class="govuk-footer__meta-item"><a class="govuk-footer__link govuk-footer__copyright-logo" href="#" onclick="return false;">© Crown copyright</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/govuk-frontend@5.4.1/dist/govuk/govuk-frontend.min.js"></script>
+<script>
+window.GOVUKFrontend && window.GOVUKFrontend.initAll();
+
+var LOGGED_IN_PAGES = ['dashboard','privacy','perms','services','sever','equity','inherit'];
+
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  var el = document.getElementById('page-' + page);
+  if (!el) return;
+  el.classList.add('active');
+
+  var isLoggedIn = LOGGED_IN_PAGES.indexOf(page) !== -1;
+  document.getElementById('hdr-min').style.display  = isLoggedIn ? 'none' : '';
+  document.getElementById('hdr-full').style.display = isLoggedIn ? ''     : 'none';
+  document.getElementById('subnav').style.display   = isLoggedIn ? ''     : 'none';
+
+  var subnavMap = { dashboard:'dashboard', privacy:'privacy', perms:'perms', services:'services', sever:'services', equity:'services', inherit:'services' };
+  var current = subnavMap[page] || '';
+  document.querySelectorAll('#subnav a').forEach(function(a){
+    a.classList.toggle('is-current', a.getAttribute('data-subnav') === current);
+  });
+
+  window.scrollTo(0,0);
+}
+
+document.addEventListener('click', function(e){
+  var el = e.target.closest('[data-nav]');
+  if (el) { e.preventDefault(); navigate(el.getAttribute('data-nav')); }
+});
+
+/* ── Page 5: grant success ─────────────────────────────── */
+function showGrantSuccess() {
+  document.getElementById('grant-success').classList.remove('js-hidden');
+}
+
+/* ── Page 7: sever success ─────────────────────────────── */
+function showSeverSuccess() {
+  document.getElementById('sever-success').classList.remove('js-hidden');
+}
+
+/* ── Page 8: equity live update ────────────────────────── */
+function updateEquity(val) {
+  val = parseInt(val) || 0;
+  if (val < 0) val = 0;
+  if (val > 50) val = 50;
+  var sarahAfter = 50 - val;
+  document.getElementById('sarah-after').textContent = sarahAfter + '%';
+  document.getElementById('third-party-after').textContent = val > 0 ? val + '%' : '—';
+  document.getElementById('third-party-row').style.display = val > 0 ? '' : 'none';
+
+  document.getElementById('bar-sarah').style.width = sarahAfter + '%';
+  document.getElementById('bar-sarah').textContent = sarahAfter > 5 ? 'Sarah ' + sarahAfter + '%' : '';
+  document.getElementById('bar-third').style.width = val + '%';
+  document.getElementById('bar-third').textContent = val > 5 ? document.getElementById('recipient-id').value || 'Recipient' : '';
+
+  if (val > 0) {
+    document.getElementById('equity-success').classList.remove('js-hidden');
+    document.getElementById('equity-success-msg').textContent = 'Preview: You will transfer ' + val + '% to ' + (document.getElementById('recipient-id').value || 'the specified recipient') + '. Submit below to register this change.';
+  } else {
+    document.getElementById('equity-success').classList.add('js-hidden');
+  }
+}
+
+function updateRecipient(val) {
+  document.getElementById('third-party-name').textContent = val || '—';
+  document.getElementById('bar-third').textContent = parseInt(document.getElementById('transfer-pct').value) > 5 ? val || 'Recipient' : '';
+  updateEquity(document.getElementById('transfer-pct').value);
+}
+
+/* ── Page 9: inheritance status ────────────────────────── */
+function updateInheritStatus() {
+  var checked = document.getElementById('probate-check').checked;
+  var id = document.getElementById('beneficiary-id').value.trim();
+  var tag = document.getElementById('inherit-status-tag');
+  if (checked && id) {
+    tag.textContent = 'Ready to save';
+    tag.className = 'govuk-tag govuk-tag--blue';
+  } else {
+    tag.textContent = 'Inactive — setup pending';
+    tag.className = 'govuk-tag govuk-tag--grey';
+  }
+}
+
+function saveInherit() {
+  var tag = document.getElementById('inherit-status-tag');
+  tag.textContent = 'Active';
+  tag.className = 'govuk-tag govuk-tag--green';
+  document.getElementById('inherit-success').classList.remove('js-hidden');
+}
+</script>
+</body>
+</html>
