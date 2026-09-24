@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Manage your property – GOV.UK</title>
+<style>
+:root{--text:#0b0c0c;--secondary:#505a5f;--link:#1d70b8;--link-hover:#003078;--focus:#fd0;--border:#b1b4b6;--bg:#fff;--grey:#f3f2f1;--green:#00703c;--green-dark:#002d18;--red:#d4351c;--blue-tag-bg:#d2e2f1;--blue-tag:#0f385c;--green-tag-bg:#cce2d8;--green-tag:#005a30;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"GDS Transport",arial,sans-serif;font-size:1rem;line-height:1.25;-webkit-font-smoothing:antialiased;min-height:100%;display:flex;flex-direction:column}
+a{color:var(--link)}a:hover{color:var(--link-hover)}
+a:focus,button:focus,input:focus+label{outline:3px solid transparent}
+a:focus{background:var(--focus);color:var(--text);box-shadow:0 -2px var(--focus),0 4px var(--text);text-decoration:none}
+.wrap{max-width:960px;margin:0 15px}
+@media(min-width:40.0625em){.wrap{margin:0 30px}}
+@media(min-width:1020px){.wrap{margin:0 auto}}
+header.gh{background:var(--text);border-bottom:10px solid var(--text)}
+.gh .wrap{padding:10px 0;display:flex;align-items:center}
+.logo{color:#fff;font-weight:700;font-size:30px;line-height:1;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.logo:hover,.logo:focus{color:#fff}
+.logo svg{width:36px;height:32px;fill:#fff}
+.sn{border-bottom:1px solid var(--border);background:var(--grey)}
+.sn .wrap{display:flex;justify-content:space-between;align-items:center;padding:10px 0;flex-wrap:wrap;gap:8px}
+.sn a{font-weight:700;font-size:1.1875rem;color:var(--text);text-decoration:none}
+.sn a:hover{text-decoration:underline}
+.sn nav a{margin-left:20px;font-weight:400;font-size:1rem}
+.phase{padding:10px 0;border-bottom:1px solid var(--border);font-size:1rem}
+.phase .wrap{display:flex;gap:10px;align-items:baseline}
+.tag{display:inline-block;padding:2px 8px 1px;font-size:.875rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;background:var(--blue-tag-bg);color:var(--blue-tag)}
+.tag.green{background:var(--green-tag-bg);color:var(--green-tag);font-size:1rem;padding:4px 10px 3px}
+main{flex:1;padding:20px 0 30px}
+.back,.crumbs{margin:0 0 15px;font-size:1rem}
+.back{display:inline-block;position:relative;padding-left:14px}
+.back::before{content:"";position:absolute;left:0;top:50%;margin-top:-5px;width:7px;height:7px;border:solid;border-width:1px 0 0 1px;transform:rotate(-45deg);border-color:var(--text)}
+.crumbs ol{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap}
+.crumbs li{margin-right:10px;padding-right:15px;position:relative}
+.crumbs li:not(:last-child)::after{content:"";position:absolute;right:0;top:50%;margin-top:-4px;width:6px;height:6px;border:solid var(--text);border-width:1px 1px 0 0;transform:rotate(45deg)}
+.col{max-width:40em}
+h1,h2,h3{font-weight:700;margin:0}
+.xl{font-size:2rem;line-height:1.09;margin-bottom:30px}.l{font-size:1.6875rem;line-height:1.11;margin-bottom:20px}.m{font-size:1.125rem;line-height:1.11;margin:30px 0 15px}.s{font-size:1rem;line-height:1.25}
+@media(min-width:40.0625em){.xl{font-size:3rem;line-height:1.04;margin-bottom:50px}.l{font-size:2.25rem;line-height:1.11}.m{font-size:1.5rem;line-height:1.25}.s{font-size:1.1875rem}}
+p,.body{margin:0 0 15px;font-size:1rem;line-height:1.25}
+.lead{font-size:1.125rem;line-height:1.33;margin-bottom:30px}
+@media(min-width:40.0625em){p,.body{font-size:1.1875rem;line-height:1.32;margin-bottom:20px}.lead{font-size:1.5rem;line-height:1.25}}
+.btn{display:inline-block;background:var(--green);color:#fff;border:2px solid transparent;box-shadow:0 2px 0 var(--green-dark);padding:8px 10px 7px;font:inherit;font-size:1.1875rem;line-height:1;text-align:center;text-decoration:none;cursor:pointer;margin:0 0 22px;width:100%}
+@media(min-width:40.0625em){.btn{width:auto}}
+.btn:hover{background:#005a30;color:#fff}
+.btn:focus{background:var(--focus);color:var(--text);box-shadow:0 2px 0 var(--text);border-color:var(--focus);outline:3px solid transparent}
+.btn.start{font-weight:700;font-size:1.5rem;padding:10px 25px 10px 15px;display:inline-flex;gap:10px;align-items:center}
+dl.sl{margin:0 0 30px;font-size:1rem;display:table;width:100%;table-layout:fixed}
+.sl .row{display:block;border-bottom:1px solid var(--border);padding:10px 0}
+@media(min-width:40.0625em){.sl .row{display:table-row}.sl dt,.sl dd{display:table-cell;padding:10px 20px 10px 0;border-bottom:1px solid var(--border)}.sl .row{border:0;padding:0}.sl dt{width:30%}dl.sl{font-size:1.1875rem}}
+.sl dt{font-weight:700;margin:0 0 5px}.sl dd{margin:0}
+.panel{background:var(--green);color:#fff;text-align:center;padding:35px;margin-bottom:30px;border:5px solid transparent}
+.panel h1{font-size:2rem;margin-bottom:15px}.panel .b{font-size:1.5rem;line-height:1.2}
+@media(min-width:40.0625em){.panel h1{font-size:3rem}}
+.nb{border:5px solid var(--green);background:#fff;margin-bottom:30px}
+.nb .h{background:var(--green);color:#fff;padding:2px 20px;font-size:1.1875rem;font-weight:700}
+.nb .c{padding:20px}.nb .c h1{font-size:1.5rem;line-height:1.2;margin-bottom:10px}.nb .c p{margin:0}
+.inset{border-left:10px solid var(--border);padding:15px;margin:0 0 30px}
+.inset p{margin:0}
+label.lb,legend{display:block;font-size:1rem;margin-bottom:5px}
+@media(min-width:40.0625em){label.lb{font-size:1.1875rem}}
+legend.pg{padding:0;margin:0 0 30px}legend.pg h1{margin:0}
+fieldset{border:0;margin:0;padding:0}
+.fg{margin-bottom:20px}.fg.err{border-left:5px solid var(--red);padding-left:15px}
+input.tx{display:block;width:100%;max-width:26em;height:40px;padding:5px;border:2px solid var(--text);border-radius:0;font:inherit;font-size:1.1875rem}
+input.tx:focus{outline:3px solid var(--focus);outline-offset:0;box-shadow:inset 0 0 0 2px var(--text)}
+.fg.err input.tx{border-color:var(--red)}
+.em{display:block;color:var(--red);font-weight:700;margin-bottom:5px}
+.es{border:5px solid var(--red);padding:20px;margin-bottom:30px}
+.es h2{font-size:1.5rem;margin-bottom:15px}.es ul{margin:0;padding:0;list-style:none;font-weight:700}
+.es a{color:var(--red)}
+.hint{color:var(--secondary);font-size:1rem;margin:0 0 15px}
+.radio{display:flex;align-items:flex-start;position:relative;margin-bottom:10px;min-height:40px}
+.radio input{position:absolute;left:0;top:0;width:44px;height:44px;margin:0;opacity:0;cursor:pointer;z-index:1}
+.radio label{padding:8px 15px 5px 55px;font-size:1.1875rem;line-height:1.25;display:block;cursor:pointer;position:relative}
+.radio label::before{content:"";position:absolute;left:0;top:0;width:40px;height:40px;border:2px solid var(--text);border-radius:50%;background:#fff}
+.radio label::after{content:"";position:absolute;left:10px;top:10px;width:0;height:0;border:10px solid var(--text);border-radius:50%;opacity:0}
+.radio input:checked+label::after{opacity:1}
+.radio input:focus+label::before{outline:3px solid var(--focus);outline-offset:1px;box-shadow:0 0 0 4px var(--focus)}
+.radio .hint{position:absolute;left:0;top:44px;padding-left:55px;margin:0}
+.radio.h{margin-bottom:60px}
+.links{list-style:none;padding:0;margin:0 0 30px}.links li{margin-bottom:10px;font-size:1.1875rem}
+hr{border:0;border-top:1px solid var(--border);margin:30px 0}
+.tl{list-style:none;margin:0 0 30px;padding:0}
+.tl li{position:relative;padding:0 0 22px 42px}
+.tl li::before{content:"";position:absolute;left:11px;top:28px;bottom:0;width:4px;background:var(--green)}
+.tl li:last-child{padding-bottom:0}.tl li:last-child::before{display:none}
+.tl .dot{position:absolute;left:0;top:0;width:26px;height:26px;border-radius:50%;background:var(--green);color:#fff;font-weight:700;text-align:center;line-height:26px;font-size:16px}
+.tl h3{font-size:1.1875rem;margin-bottom:3px}.tl p{margin:0;color:var(--secondary);font-size:1rem}
+footer{background:var(--grey);border-top:1px solid var(--border);padding:25px 0 15px;font-size:1rem}
+footer ul{list-style:none;margin:0 0 25px;padding:0;display:flex;flex-wrap:wrap;gap:8px 20px}
+footer .ogl{color:var(--secondary);font-size:.875rem;max-width:40em}
+footer .wrap>div{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.ol .gh{border-bottom-color:var(--text)}
+.ol main .col{max-width:30em}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</head>
+<body>
+<header class="gh"><div class="wrap"><a class="logo" href="#/" aria-label="GOV.UK">
+<svg viewBox="0 0 36 32" aria-hidden="true"><path d="M4 30h28v-4H4zM3 10l5 12h20l5-12-8 5-7-9-7 9zM5 6a2.5 2.5 0 1 0 0 .1zM31 6a2.5 2.5 0 1 0 0 .1zM18 1a2.5 2.5 0 1 0 0 .1z"/></svg>GOV.UK</a></div></header>
+<div id="sn"></div>
+<div class="phase"><div class="wrap"><span class="tag">Beta</span><span>This is a new service. Your <a href="#/feedback" onclick="return false">feedback</a> will help us to improve it.</span></div></div>
+<main><div class="wrap" id="app"></div></main>
+<footer><div class="wrap"><ul><li><a href="#" onclick="return false">Help</a></li><li><a href="#" onclick="return false">Privacy</a></li><li><a href="#" onclick="return false">Cookies</a></li><li><a href="#" onclick="return false">Accessibility statement</a></li><li><a href="#" onclick="return false">Contact</a></li><li><a href="#" onclick="return false">Terms and conditions</a></li></ul>
+<div><p class="ogl">All content is available under the Open Government Licence v3.0, except where otherwise stated</p><p class="ogl"><a href="#" onclick="return false">© Crown copyright</a></p></div></div></footer>
+<script>
+const S={signedIn:false,first:'',last:'',method:'',updated:false};
+const $=s=>document.querySelector(s);
+const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const newName=()=>(S.first&&S.last)?(S.first+' '+S.last).trim():'Rishi Singh';
+const owner=()=>S.updated?newName():'Deepal Patel';
+const back=h=>`<a class="back" href="${h}">Back</a>`;
+const crumbs=`<nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="#/">Home</a></li><li aria-current="page">Manage your property</li></ol></nav>`;
+const rows=r=>`<dl class="sl">${r.map(([k,v])=>`<div class="row"><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>`;
+const btn=(t,h)=>`<a class="btn" role="button" draggable="false" href="${h}">${t}</a>`;
+const ROUTES={
+'':()=>({t:'Manage your property',h:`<div class="col"><h1 class="xl">Manage your property</h1><p class="lead">Access information about properties you own and manage updates to your records.</p><p>You’ll need to sign in with your GOV.UK One Login.</p>
+<a class="btn start" role="button" href="#/sign-in">Sign in<svg width="17" height="19" viewBox="0 0 33 40" fill="#fff" aria-hidden="true"><path d="M0 0h20l13 20-13 20H0l13-20z"/></svg></a>
+<h2 class="m">Before you start</h2><p>You can use this service if you are the registered owner of a property in England or Wales.</p></div>`}),
+'sign-in':()=>({t:'Sign in with GOV.UK One Login',ol:1,h:`${back('#/')}<div class="col"><h1 class="l">Sign in with GOV.UK One Login</h1><p>Sign in to continue to <strong>Manage your property</strong>.</p>
+<form data-form="signin" novalidate><div class="fg"><label class="lb" for="email"><b>Email address</b></label><input class="tx" id="email" name="email" type="email" autocomplete="email" spellcheck="false"></div>
+<div class="fg"><label class="lb" for="pw"><b>Password</b></label><input class="tx" id="pw" name="pw" type="password" autocomplete="current-password"></div>
+<p><a href="#" onclick="return false">Forgotten your password?</a></p><button class="btn">Sign in</button></form><hr>
+<p><a href="#" onclick="return false">Create a GOV.UK One Login</a></p></div>`}),
+'dashboard':()=>({t:'Your property',b:crumbs,h:`<div class="col"><h1 class="xl">Your property</h1><h2 class="l">2 High Street, Brighton</h2>
+${S.updated?'<p><strong class="tag green">Ownership details up to date</strong></p>':''}
+<h3 class="m" style="margin-top:0">Ownership details</h3>${rows([['Registered owner',esc(owner())],['Mortgage','ABC Bank']])}
+<h3 class="m" style="margin-top:0">Contact details</h3>${rows([['Email address','Verified'],['Mobile phone number','Verified'],['Last updated','6 months ago']])}
+${S.updated?`<h2 class="m">Recent activity</h2><ol class="tl">${['Name change requested','Identity verified','Security notification sent','Property record updated'].map(x=>`<li><span class="dot" aria-hidden="true">✓</span><h3>${x}</h3><p><span class="sr">Completed on </span>24 September 2026</p></li>`).join('')}</ol>`:''}
+<h2 class="m">Something has changed</h2><ul class="links"><li><a href="#/update-name">I’ve changed my name</a></li><li><a href="#" onclick="return false">I’ve moved home</a></li><li><a href="#" onclick="return false">Someone has died</a></li><li><a href="#" onclick="return false">My relationship status has changed</a></li></ul></div>`}),
+'update-name':()=>({t:'Update the name on your property record',b:back('#/dashboard'),h:`<div class="col"><h1 class="xl">Update the name on your property record</h1><p>If you’ve changed your name, you can update the name recorded on your property.</p>
+${rows([['Name currently recorded on property','Deepal Patel']])}<p>We’ll need to confirm that the person recorded as Deepal Patel is the same person as the person requesting this change.</p>${btn('Continue','#/new-name')}</div>`}),
+'new-name':e=>({t:'What name do you currently use?',err:e,b:back('#/update-name'),h:`<div class="col">${e?`<div class="es" role="alert" tabindex="-1"><h2>There is a problem</h2><ul>${e.map(x=>`<li><a href="#${x[0]}" data-f="${x[0]}">${x[1]}</a></li>`).join('')}</ul></div>`:''}
+<form data-form="name" novalidate><fieldset><legend class="pg"><h1 class="xl" style="margin:0">What name do you currently use?</h1></legend>
+${[['first','First name','Enter your first name'],['last','Last name','Enter your last name']].map(([k,l,m])=>{const bad=e&&e.some(x=>x[0]===k);return`<div class="fg ${bad?'err':''}"><label class="lb" for="${k}">${l}</label>${bad?`<span class="em"><span class="sr">Error: </span>${m}</span>`:''}<input class="tx" style="max-width:20em" id="${k}" name="${k}" type="text" spellcheck="false" value="${esc(S[k])}"></div>`}).join('')}
+</fieldset><button class="btn">Continue</button></form></div>`}),
+'confirm-previous-name':e=>({t:'Confirm your previous name',b:back('#/new-name'),h:`<div class="col">${e?`<div class="es" role="alert" tabindex="-1"><h2>There is a problem</h2><ul><li><a href="#m1" data-f="m1">Select how you would like us to confirm your previous name</a></li></ul></div>`:''}
+<h1 class="xl">Confirm your previous name</h1><p>We need to confirm that the person recorded as Deepal Patel is the same person now known as ${esc(newName())}.</p>
+<form data-form="method" novalidate><div class="fg ${e?'err':''}"><fieldset><legend class="m" style="margin-top:0">How would you like us to do this?</legend>${e?'<span class="em"><span class="sr">Error: </span>Select how you would like us to confirm your previous name</span>':''}
+<div class="radio"><input type="radio" id="m1" name="m" value="records" ${S.method==='records'?'checked':''}><label for="m1">Verify using government records</label></div>
+<div class="radio h"><input type="radio" id="m2" name="m" value="upload" ${S.method==='upload'?'checked':''}><label for="m2">Upload evidence</label><div class="hint">Examples of evidence: previous passport, previous driving licence, name change document.</div></div></fieldset></div>
+<button class="btn">Continue</button></form></div>`}),
+'identity-confirmed':()=>({t:'Identity confirmed',h:`<div class="col"><div class="panel"><h1>Identity confirmed</h1><div class="b">We’ve confirmed that Deepal Patel and ${esc(newName())} are the same person.</div></div><p>No further evidence is required.</p>${btn('Continue','#/security-notification')}</div>`}),
+'security-notification':()=>({t:'Security notification',b:back('#/identity-confirmed'),h:`<div class="col"><h1 class="xl">Security notification</h1><p>We’ve sent a notification to the verified email address and mobile phone number associated with this property.</p>
+<div class="inset"><p>The request can be stopped using the link provided in the notification.</p></div><form data-form="update" novalidate><button class="btn">Update my property record</button></form></div>`}),
+'success':()=>({t:'Name updated successfully',h:`<div class="col"><div class="nb" role="alert"><div class="h">Success</div><div class="c"><h1>Name updated successfully</h1><p>The ownership details for this property have been updated.</p></div></div>
+${rows([['Property','2 High Street, Brighton'],['Registered owner',esc(owner())],['Reference','HMLR-123456']])}<p>We’ll keep a record of this change in your property history.</p>${btn('Return to dashboard','#/dashboard')}</div>`})
+};
+const H={
+signin(){S.signedIn=true;go('dashboard')},
+name(f){S.first=(f.get('first')||'').trim();S.last=(f.get('last')||'').trim();const e=[];if(!S.first)e.push(['first','Enter your first name']);if(!S.last)e.push(['last','Enter your last name']);e.length?render('new-name',e):go('confirm-previous-name')},
+method(f){S.method=f.get('m')||'';S.method?go('identity-confirmed'):render('confirm-previous-name',true)},
+update(){S.updated=true;go('success')}
+};
+const go=r=>{location.hash='#/'+r};
+function render(r,e){
+  if(r==='sign-out'){Object.assign(S,{signedIn:false,first:'',last:'',method:'',updated:false});return go('')}
+  if(!ROUTES[r])r='';
+  if(!S.signedIn&&r&&r!=='sign-in')return go('sign-in');
+  const p=ROUTES[r](e);
+  document.body.classList.toggle('ol',!!p.ol);
+  $('#sn').innerHTML=p.ol?'':`<div class="sn"><div class="wrap"><a href="#/${S.signedIn?'dashboard':''}">Manage your property</a>${S.signedIn?'<nav aria-label="Service navigation"><a href="#/dashboard">Your property</a><a href="#/sign-out">Sign out</a></nav>':''}</div></div>`;
+  $('#app').innerHTML=(p.b||'')+p.h;
+  document.title=(p.err?'Error: ':'')+p.t+' – Manage your property – GOV.UK';
+  window.scrollTo(0,0);
+  const t=$('.es');if(t)t.focus();
+}
+window.addEventListener('hashchange',()=>render(location.hash.replace(/^#\/?/,'')));
+document.addEventListener('submit',ev=>{ev.preventDefault();H[ev.target.dataset.form](new FormData(ev.target))});
+document.addEventListener('click',ev=>{const a=ev.target.closest('[data-f]');if(a){ev.preventDefault();const i=document.getElementById(a.dataset.f);i&&i.focus()}});
+render(location.hash.replace(/^#\/?/,''));
+</script>
+</body>
+</html>
